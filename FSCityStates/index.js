@@ -1,6 +1,8 @@
-import { promises as fs } from "fs";
+import {promises as fs} from "fs"
 
 async function populate() {
+   
+        
     let stateData = await fs.readFile('./Files/Estados.json')
     const States = JSON.parse(stateData)
     let cityData = await fs.readFile('./Files/Cidades.json')
@@ -15,7 +17,7 @@ async function populate() {
 async function count(UF) {
     let Read = await fs.readFile(`./States/${UF}.json`)
     Read = JSON.parse(Read)
-    console.log(Read.length)
+    console.log("Quantidade: " + Read.length + " Cidades em: " + UF)
 }
 
 async function Top5() {
@@ -40,6 +42,9 @@ async function Top5() {
 }
 
 
-populate()
-count("MG")
-Top5()
+async function init(){
+    await populate()
+    await count("MG")
+    await Top5()
+}
+init()
