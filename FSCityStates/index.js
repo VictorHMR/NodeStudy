@@ -1,12 +1,34 @@
 import {promises as fs} from "fs"
+import * as fsc from "fs"
+import * as researches from "./researches.js"
 
-async function populate() {
-   
-        
-    let stateData = await fs.readFile('./Files/Estados.json')
-    const States = JSON.parse(stateData)
-    let cityData = await fs.readFile('./Files/Cidades.json')
-    const Citys = JSON.parse(cityData)
+async function verify(){
+    if(!fsc.existsSync('./States')){
+        fs.mkdir('./States')
+    }
+    if(!fsc.existsSync('./Region')){
+        fs.mkdir('./Region')
+    }
+    if(!fsc.existsSync('./Region/Norte')){
+        fs.mkdir('./Region/Norte')
+    }
+    if(!fsc.existsSync('./Region/Nordeste')){
+        fs.mkdir('./Region/Nordeste')
+    }
+    if(!fsc.existsSync('./Region/Centro-Oeste')){
+        fs.mkdir('./Region/Centro-Oeste')
+    }
+    if(!fsc.existsSync('./Region/Sul')){
+        fs.mkdir('./Region/Sul')
+    }
+    if(!fsc.existsSync('./Region/Sudeste')){
+        fs.mkdir('./Region/Sudeste')
+    }
+}
+
+async function populate() {        
+    const States = JSON.parse(await fs.readFile('./Files/Estados.json'))
+    const Citys = JSON.parse(await fs.readFile('./Files/Cidades.json'))
 
     for (var State of States) {
         const UFAdd = Citys.filter(city => city.Estado == State.ID)
@@ -14,37 +36,36 @@ async function populate() {
     }
 }
 
-async function count(UF) {
-    let Read = await fs.readFile(`./States/${UF}.json`)
-    Read = JSON.parse(Read)
-    console.log("Quantidade: " + Read.length + " Cidades em: " + UF)
-}
+async function populateRegion(){
+    const States = JSON.parse(await fs.readFile('./Files/Estados.json'))
+    const Citys = JSON.parse(await fs.readFile('./Files/Cidades.json'))
+    const Capitals = JSON.parse(await fs.readFile('./Files/Capitais.json')) 
 
-async function Top5() {
-    var Result = []
-    let stateData = await fs.readFile('./Files/Estados.json')
-    stateData = JSON.parse(stateData)
-    var States = stateData.map((stateData) => { return stateData.Sigla })
-    for (var State of States) {
-        let Read = await fs.readFile(`./States/${State}.json`)
-        Read = JSON.parse(Read)
-        Result.push({name: State, Citys: Read.length})
-    }
-    
-    Result.sort((a,b)=>{
-        if(a.Citys < b.Citys){ return 1}
-        if(a.Citys > b.Citys){ return -1}
-        return 0
-    })
+    States.forEach(state => {
+        var list = []
+        var stateA = null
 
-    Result = Result.splice(0,5)
-    console.log(Result)
+        Capitals.forEach(capital =>{
+            if(state.Nome === capital.Estado){
+                stateA = capital.Região
+            }
+        })
+        Citys.forEach(city=>{
+            if(city.Estado === state.ID){
+                list.push(city)
+            }
+        }) 
+            fs.writeFile(`./Region/${stateA}/${state.Sigla}.json`, JSON.stringify(list,null,2))
+    });
 }
 
 
 async function init(){
+    await verify()
     await populate()
-    await count("MG")
-    await Top5()
+    await populateRegion()
+    await researches.count("MG")
+    await researches.Top5()
+    await researches.searchCap("MG")
 }
 init()
