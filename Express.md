@@ -1,4 +1,4 @@
-# Comandos Básicos Node/Express
+# Comandos Básicos Node | Express | EJS
 
 
 ## Iniciar Projeto Node
@@ -51,4 +51,20 @@ ___})___
 ## Query Params
 →  { <span style="color: red">Entrando em Desuso</span> } São parametros passados pela url que não precisam ser definidos na rota, eles seguem a seguinte sintaxe:
 `www.localhost:5050/?Parametro=etc`, para acessa-los basta usar a o parametro req da rota, da seguinte forma:  
-↳ ___req.query["Parametro"]___
+↳ ___req.query["Parametro"]___  
+
+<hr>
+
+## Instalando o EJS
+
+→ ___npm install ejs___
+
+## Utilizando o EJS
+
+→ Para que seja utilizado a template engine EJS deve ser definido como o padrão do express da seguinte forma:  
+  
+↳ ___app.set('view engine', 'ejs')___  
+  
+→ Com isso, tudo estará configurado para que seja renderizado o html, para isso é necessario configurar a resposta de uma rota da seguinte forma:  
+  
+↳ ___res.render("index")___
