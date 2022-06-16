@@ -55,16 +55,7 @@ ___})___
 
 <hr>
 
-## Instalando o EJS
+## Usando Arquivos Estaticos
+→ Para usar arquivos estaticos como css, js de FrontEnd e imagens, é necessario definir a pasta de arquivos pelo express, seguindo a seguinte sintaxe:  
+↳ ___app.use(express.static('public'))___
 
-→ ___npm install ejs___
-
-## Utilizando o EJS
-
-→ Para que seja utilizado a template engine EJS deve ser definido como o padrão do express da seguinte forma:  
-  
-↳ ___app.set('view engine', 'ejs')___  
-  
-→ Com isso, tudo estará configurado para que seja renderizado o html, para isso é necessario configurar a resposta de uma rota da seguinte forma:  
-  
-↳ ___res.render("index")___
